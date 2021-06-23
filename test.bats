@@ -107,12 +107,12 @@ container() {
 
 @test "duplicate gid" {
   run container -u 501:1 autouseradd
-  [[ "$status" -eq 1 ]]
-  [[ "${lines[0]}" = "groupadd: GID '1' already exists" ]]
+  [[ "$status" -eq 0 ]]
+  [[ "${lines[0]}" != "groupadd: GID '1' already exists" ]]
 }
 
 @test "duplicate uid" {
   run container -u 1:501 autouseradd
-  [[ "$status" -eq 1 ]]
-  [[ "${lines[0]}" = "useradd: UID 1 is not unique" ]]
+  [[ "$status" -eq 0 ]]
+  [[ "${lines[0]}" != "useradd: UID 1 is not unique" ]]
 }

@@ -2,6 +2,7 @@
 
 #include <err.h>
 #include <getopt.h>
+#include <grp.h>
 #include <pwd.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -125,8 +126,10 @@ int main(int argc, char* argv[]) {
 
   char* ruids = itoa(ruid);
   char* rgids = itoa(rgid);
-  run((char* []){"/usr/sbin/groupadd", "--gid", rgids, group, NULL});
-  run((char* []){"/usr/sbin/useradd", "--no-user-group",
+  if (getgrgid(rgid) == NULL)
+    run((char* []){"/usr/sbin/groupadd", "--gid", rgids, group, NULL});
+  if (getpwuid(ruid) == NULL)
+    run((char* []){"/usr/sbin/useradd", "--no-user-group",
     create_home ? "--create-home" : "--no-create-home",
     "--uid", ruids, "--gid", rgids, "--shell", shell, user, NULL});
   free(ruids);
