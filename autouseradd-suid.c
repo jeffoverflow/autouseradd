@@ -128,10 +128,14 @@ int main(int argc, char* argv[]) {
   char* rgids = itoa(rgid);
   if (getgrgid(rgid) == NULL)
     run((char* []){"/usr/sbin/groupadd", "--gid", rgids, group, NULL});
+  else
+    printf("groupadd: warning: the gid %d already exists.\n", rgid);
   if (getpwuid(ruid) == NULL)
     run((char* []){"/usr/sbin/useradd", "--no-user-group",
     create_home ? "--create-home" : "--no-create-home",
     "--uid", ruids, "--gid", rgids, "--shell", shell, user, NULL});
+  else
+    printf("useradd: warning: the uid %d already exists.\n", ruid);
   free(ruids);
   free(rgids);
 
